@@ -54,7 +54,7 @@ module CarrierWave
         tmp_file = Tempfile.new(
           CarrierWave::Support::UriFilename.filename(file.name)
         )
-        (file.download tmp_file.path, verify: :all).read
+        (file.download(tmp_file.path, verify: :all)).read
       end
 
       def store(new_file)
@@ -62,7 +62,7 @@ module CarrierWave
         remote_file = bucket.create_file(
           new_file.path,
           path,
-          gcloud_options.write_options(new_file)
+          **gcloud_options.write_options(new_file)
         )
 
         if uploader.add_all_users_to_reader_group
@@ -81,7 +81,7 @@ module CarrierWave
       end
 
       def authenticated_url(options = {})
-        bucket.signed_url(path, gcloud_options.expiration_options(options))
+        bucket.signed_url(path, **gcloud_options.expiration_options(options))
       end
 
       def public_url
